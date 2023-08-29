@@ -10,7 +10,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Post {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String    @db.ObjectId
+  user      User      @relation(fields: [userId], references: [id])
+  comments  Comment[]
+  caption   Caption?
+  createdAt DateTime  @default(now())
+  editedAt  DateTime  @default(now())
+}
+
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  email String
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  username     String      @unique
+  email        String      @unique
+  password     String
+  bio          String
+  posts        Post[]
+  profilePic   ProfilePic?
+  registeredAt DateTime    @default(now())
+  updatedAt    DateTime    @default(now())
+}
+
+model Comment {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  postId String @db.ObjectId
+  text   String
+  post   Post   @relation(fields: [postId], references: [id])
+}
+
+model Caption {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  postId String @unique @db.ObjectId
+  text   String
+  post   Post   @relation(fields: [postId], references: [id])
+}
+
+model ProfilePic {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @unique @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  url    String
 }
