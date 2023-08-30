@@ -21,15 +21,14 @@ model Post {
 }
 
 model User {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
-  username     String      @unique
-  email        String      @unique
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  username     String   @unique
+  email        String   @unique
   password     String
-  bio          String
   posts        Post[]
-  profilePic   ProfilePic?
-  registeredAt DateTime    @default(now())
-  updatedAt    DateTime    @default(now())
+  profilePic   Profile?
+  registeredAt DateTime @default(now())
+  updatedAt    DateTime @default(now())
 }
 
 model Comment {
@@ -46,9 +45,10 @@ model Caption {
   post   Post   @relation(fields: [postId], references: [id])
 }
 
-model ProfilePic {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @unique @db.ObjectId
-  user   User   @relation(fields: [userId], references: [id])
-  url    String
+model Profile {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @unique @db.ObjectId
+  user     User   @relation(fields: [userId], references: [id])
+  imageUrl String
+  bio      String
 }
