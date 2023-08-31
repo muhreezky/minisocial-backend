@@ -16,7 +16,7 @@ model Post {
   user      User      @relation(fields: [userId], references: [id])
   mediaUrl  String
   comments  Comment[]
-  caption   Caption?
+  caption   String    @default("")
   createdAt DateTime  @default(now())
   editedAt  DateTime  @default(now())
 }
@@ -35,13 +35,6 @@ model User {
 model Comment {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   postId String @db.ObjectId
-  text   String
-  post   Post   @relation(fields: [postId], references: [id])
-}
-
-model Caption {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  postId String @unique @db.ObjectId
   text   String
   post   Post   @relation(fields: [postId], references: [id])
 }

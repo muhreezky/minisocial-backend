@@ -26,6 +26,7 @@ export async function loginUser(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
     const user = await login(email, password);
+    if (!user) return res.status(400).json({ message: 'Login gagal, cek kembali data anda', data: null });
     const token = jwt.sign(
       { id: user?.id, username: user?.username },
       process.env.JWT_ACCESS_SECRET as string,
