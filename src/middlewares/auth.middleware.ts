@@ -7,7 +7,7 @@ function unauthed () {
 
 export type CustomRequest = Request & {
 	token: string | JwtPayload;
-}
+};
 
 export function verifyUser (req: Request, res: Response, next: NextFunction) {
 	try {

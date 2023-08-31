@@ -3,7 +3,7 @@ import prisma from '../utils/prisma';
 
 // Mengambil data user
 export async function getUserData(cred: string, uname?: string) {
-  const user = await prisma.user.findFirst({ 
+  const user = await prisma.user.findFirst({
     where: {
       OR: [{ email: cred }, { username: uname || cred }],
     },
@@ -11,7 +11,11 @@ export async function getUserData(cred: string, uname?: string) {
   return user;
 }
 
-export async function newAccount(email: string, username: string, password: string) {
+export async function newAccount(
+  email: string,
+  username: string,
+  password: string
+) {
   try {
     const exists = !!(await getUserData(email, username));
     if (exists) return null;
@@ -32,5 +36,12 @@ export async function login(email: string, password: string) {
   if (!user) return null;
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) return null;
+  return user;
+}
+
+export async function getUserById(id: string) {
+  const user = await prisma.user.findFirst({
+    where: { id },
+  });
   return user;
 }
