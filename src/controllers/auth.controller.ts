@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getUserById, getUserData, login, newAccount } from '../services/auth.service';
+import { getUserById, login, newAccount } from '../services/auth.service';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import 'dotenv/config';
 import { CustomRequest } from '../types/cusrequest';
@@ -49,7 +49,6 @@ export async function getMe(req: Request, res: Response) {
   try {
     const token = (req as CustomRequest).token as JwtPayload;
     const user = await getUserById(token.id);
-    console.log(user);
     if (!user)
       return res.status(404).json({ message: 'User tidak ada', data: null });
     return res.status(200).json({ message: 'User ditemukan', data: { user } });
