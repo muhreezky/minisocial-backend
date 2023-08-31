@@ -25,7 +25,9 @@ export async function registerUser(req: Request, res: Response) {
 export async function loginUser(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
+    console.log('Data', req.body);
     const user = await login(email, password);
+    console.log('User : ', user);
     if (!user) return res.status(400).json({ message: 'Login gagal, cek kembali data anda', data: null });
     const token = jwt.sign(
       { id: user?.id, username: user?.username },
