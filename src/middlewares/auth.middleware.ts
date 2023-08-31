@@ -16,7 +16,8 @@ export function verifyUser (req: Request, res: Response, next: NextFunction) {
 		const token = bearer.split(' ')[1];
 		if (!token) return unauthed();
 		const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET as string);
-		(req as CustomRequest).token = decoded;
+		(req as CustomRequest).token = decoded as JwtPayload;
+		console.log(decoded);
 		next();
 	} catch (e: any) {
 		return res.status(500).json({ message: e.message, error: e });
