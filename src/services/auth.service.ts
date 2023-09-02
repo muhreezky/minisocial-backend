@@ -1,16 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import prisma from '../utils/prisma';
-
-// Mengambil data user
-export async function getUserData(cred: string, uname?: string) {
-  console.log({ cred, uname });
-  const user = await prisma.user.findFirst({
-    where: {
-      OR: [{ email: cred }, { username: uname || cred }],
-    },
-  });
-  return user;
-}
+import { getUserData } from './user.service';
 
 export async function newAccount(
   email: string,
@@ -37,12 +27,5 @@ export async function login(email: string, password: string) {
   if (!user) return null;
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) return null;
-  return user;
-}
-
-export async function getUserById(id: string) {
-  const user = await prisma.user.findFirst({
-    where: { id },
-  });
   return user;
 }
