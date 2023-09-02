@@ -9,14 +9,14 @@ export type CustomRequest = Request & {
 	token: string | JwtPayload;
 };
 
-export function verifyUser (req: Request, res: Response, next: NextFunction) {
+export function verifyUser (req: CustomRequest, res: Response, next: NextFunction) {
 	try {
 		const bearer = req.headers.authorization;
 		if (!bearer) return unauthed();
 		const token = bearer.split(' ')[1];
 		if (!token) return unauthed();
 		const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET as string);
-		(req as CustomRequest).token = decoded as JwtPayload;
+		req.token = decoded as JwtPayload;
 		next();
 	} catch (e: any) {
 		return res.status(500).json({ message: e.message, error: e });
