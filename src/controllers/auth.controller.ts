@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import { getUserById, login, newAccount } from '../services/auth.service';
+import { login, newAccount } from '../services/auth.service';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import 'dotenv/config';
 import { CustomRequest } from '../types/cusrequest';
+import { getUserById } from '../services/user.service';
 
 export async function registerUser(req: Request, res: Response) {
   try {
