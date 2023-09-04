@@ -28,8 +28,8 @@ model User {
   password     String
   posts        Post[]
   profile      Profile?
-  postCount    Int @default(0)
-  bioText String @default("")
+  postCount    Int      @default(0)
+  bioText      String   @default("")
   registeredAt DateTime @default(now())
   updatedAt    DateTime @default(now())
 }
