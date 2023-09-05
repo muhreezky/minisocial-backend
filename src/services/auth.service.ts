@@ -13,7 +13,7 @@ export async function newAccount(
     const salt = await bcrypt.genSalt(6);
     const hashed = await bcrypt.hash(password, salt);
     const account = await prisma.user.create({
-      data: { email, password: hashed, username },
+      data: { email, password: hashed, username, imageUrl: `https://ui-avatars.com/api/?size=200&name=${username}` },
     });
     return account;
   } catch (e: any) {
