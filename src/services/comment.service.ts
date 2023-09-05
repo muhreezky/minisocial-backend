@@ -14,12 +14,17 @@ export async function getComments(postId: string, before?: string) {
   return comments;
 }
 
-export async function postComment(postId: string, text: string) {
+export async function postComment(postId: string, text: string, userId: string) {
   const comment = await prisma.comment.create({
-    data: {
-      postId,
-      text
-    }
+    data: { postId, text, userId }
   });
   return comment;
+}
+
+export async function deleteComment(commentId: string, userId: string) {
+  const deletedComment = await prisma.comment.delete({
+    where: { id: commentId, userId }
+  });
+
+  return deletedComment;
 }
