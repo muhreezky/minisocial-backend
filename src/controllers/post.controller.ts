@@ -6,9 +6,9 @@ import { JwtPayload } from 'jsonwebtoken';
 export async function createPostAction(req: Request, res: Response) {
 	try {
 		const token = (req as CustomRequest).token as JwtPayload;
-		if (!token.id) return res.status(400).json({ message: 'Anda tidak diizinkan memposting' });
-		const { imgUrl, caption } = req.body;
-		const post = await createPost(imgUrl, caption, token.id);
+		if (!token.id) return res.status(403).json({ message: 'Anda tidak diizinkan memposting' });
+		const { url, caption = '' } = req.body;
+		const post = await createPost(url, caption, token.id);
 		return res.status(201).json({ message: 'Postingan berhasil dikirim', data: { post } });
 	} catch (e: any) {
 		return res.status(500).json({ message: e.message, error: e });
