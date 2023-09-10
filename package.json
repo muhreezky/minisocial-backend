@@ -7,7 +7,7 @@
     "prebuild": "rimraf dist",
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
-    "build": "prebuild && tsc",
+    "build": "tsup app --clean --format cjs,esm --env.NODE_ENV production --out-dir dist",
     "lint": "eslint --fix src test",
     "test": "jest",
     "typecheck": "tsc --noEmit",
