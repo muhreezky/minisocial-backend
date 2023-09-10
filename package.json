@@ -13,8 +13,7 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "ts-check": "tsc --project tsconfig.json",
-    "vercel-build": "tsup src --clean --format cjs --env.NODE_ENV production --env.DEPLOYMENT_ENV vercel --out-dir api",
-    "build-complete": "tsc --project tsconfig.json && rimraf dist && tsc && git add dist"
+    "vercel-build": "echo hi mom"
   },
   "keywords": [],
   "author": "CJ R. <cj@null.computer> (https://w3cj.now.sh)",
