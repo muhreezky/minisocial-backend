@@ -9,7 +9,8 @@
     "noImplicitAny": false,
     "strict": false,
     "skipLibCheck": true,
-    "allowJs": true
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "./*.js",
