@@ -1,7 +1,6 @@
 import { getByUsername } from '../services/user.service';
-import { Request, Response } from 'express';
 
-export async function getUserByUsername(req: Request, res: Response) {
+export async function getUserByUsername(req: any, res: any) {
 	const { username } = req.params;
 	const user = await getByUsername(username);
 	if (!user)

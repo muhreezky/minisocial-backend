@@ -1,11 +1,11 @@
-import { Request, Response } from 'express';
+
 import { login, newAccount } from '../services/auth.service';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import 'dotenv/config';
-import { CustomRequest } from '../types/cusrequest';
+// import { Customany } from '../types/cusany';
 import { getUserById } from '../services/user.service';
 
-export async function registerUser(req: Request, res: Response) {
+export async function registerUser(req: any, res: any) {
   try {
     const { email, username, password } = req.body;
     const user = await newAccount(email, username, password);
@@ -23,7 +23,7 @@ export async function registerUser(req: Request, res: Response) {
   }
 }
 
-export async function loginUser(req: Request, res: Response) {
+export async function loginUser(req: any, res: any) {
   try {
     const { email, password } = req.body;
     console.log('Data', req.body);
@@ -49,9 +49,9 @@ export async function loginUser(req: Request, res: Response) {
   }
 }
 
-export async function getMe(req: Request, res: Response) {
+export async function getMe(req: any, res: any) {
   try {
-    const token = (req as CustomRequest).token as JwtPayload;
+    const token = req.token as JwtPayload;
     const user = await getUserById(token.id);
     if (!user)
       return res.status(404).json({ message: 'User tidak ada', data: null });

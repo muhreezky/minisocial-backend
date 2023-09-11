@@ -1,11 +1,9 @@
-import { Request, Response } from 'express';
 import { createPost, deletePost, editCaption, getPosts, viewPost } from '../services/post.service';
-import { CustomRequest } from '../types/cusrequest';
 import { JwtPayload } from 'jsonwebtoken';
 
-export async function createPostAction(req: Request, res: Response) {
+export async function createPostAction(req: any, res: any) {
 	try {
-		const token = (req as CustomRequest).token as JwtPayload;
+		const token = req.token as JwtPayload;
 		if (!token.id) return res.status(403).json({ message: 'Anda tidak diizinkan memposting' });
 		const { url, caption = '' } = req.body;
 		const post = await createPost(url, caption, token.id);
@@ -15,9 +13,9 @@ export async function createPostAction(req: Request, res: Response) {
 	}
 }
 
-export async function editCaptionAction(req: Request, res: Response) {
+export async function editCaptionAction(req: any, res: any) {
 	try {
-		const token = (req as CustomRequest).token as JwtPayload;
+		const token = req.token as JwtPayload;
 		const { caption } = req.body;
 		const { postId } = req.params;
 		const post = await editCaption(postId, caption, token.id);
@@ -27,9 +25,9 @@ export async function editCaptionAction(req: Request, res: Response) {
 	}
 }
 
-export async function deletePostAction(req: Request, res: Response) {
+export async function deletePostAction(req: any, res: any) {
 	try {
-		const token = (req as CustomRequest).token as JwtPayload;
+		const token = req.token as JwtPayload;
 		const { postId } = req.params;
 		const deletedPost = await deletePost(postId, token.id);
 		return res.status(200).json({ message: 'Postingan berhasil dihapus', data: { deletedPost } });
@@ -38,7 +36,7 @@ export async function deletePostAction(req: Request, res: Response) {
 	}
 }
 
-export async function getPostsAction(req: Request, res: Response) {
+export async function getPostsAction(req: any, res: any) {
 	try {
 		const { before } = req.query;
 		const posts = await getPosts(before as string);
@@ -48,7 +46,7 @@ export async function getPostsAction(req: Request, res: Response) {
 	}
 }
 
-export async function viewPostAction(req: Request, res: Response) {
+export async function viewPostAction(req: any, res: any) {
 	try {
 		const { postId } = req.params;
 		const post = await viewPost(postId);
