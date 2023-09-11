@@ -13,7 +13,7 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "ts-check": "tsc --project tsconfig.json",
-    "vercel-build": "echo hi mom"
+    "vercel-build": "prisma generate"
   },
   "keywords": [],
   "author": "CJ R. <cj@null.computer> (https://w3cj.now.sh)",
