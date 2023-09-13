@@ -1,3 +1,4 @@
+// import { Request, Response } from 'express';
 import { createPost, deletePost, editCaption, getPosts, viewPost } from '../services/post.service';
 import { JwtPayload } from 'jsonwebtoken';
 
@@ -52,6 +53,18 @@ export async function viewPostAction(req: any, res: any) {
 		const post = await viewPost(postId);
 		return res.status(200).json({ message: 'Postingan berhasil dimunculkan', data: { post } });
 	} catch (e: any) {
+		return res.status(500).json({ message: e.message, error: e });
+	}
+}
+
+export async function getPostsByUsername(req: any, res: any) {
+	try {
+		const { username } = req.params;
+		const { before = '' } = req.query;
+		const posts = await getPosts(before as string, username as string);
+		return res.status(200).json({ message: 'Postingan berhasil dimunculkan', data: { before, username, posts } });
+	} catch (e: any) {
+		console.log('Error :', e);
 		return res.status(500).json({ message: e.message, error: e });
 	}
 }

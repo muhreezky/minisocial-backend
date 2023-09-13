@@ -45,14 +45,28 @@ export async function deletePost(postId: string, userId: string) {
   return edit;
 }
 
-export async function getPosts(before?: string) {
-  const where = { id: before };
+export async function getPosts(before?: string, username?: string) {
+  const findUser = {
+    user: { username }
+  }
+  const withUser = (username ? findUser : {});
   let msg;
-  if (!before) msg = await prisma.post.findFirst({ where });
+  if (!before){
+    msg = await prisma.post.findFirst({
+      where: { ...(withUser) }
+    });
+  } 
+  console.log('msg:', msg);
   const posts = await prisma.post.findMany({
     take: 5,
     skip: before ? 1 : 0,
     cursor: { id: before || msg?.id },
+    include: {
+      user: {
+        select: { id: true, username: true }
+      }
+    },
+    ...(username ? { where: withUser } : {})
   });
   return posts;
 }
