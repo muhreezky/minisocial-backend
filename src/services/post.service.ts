@@ -91,3 +91,10 @@ export async function viewPost(id: string) {
   });
   return post;
 }
+
+export async function likePost(postId: string, likerId: string) {
+  const post = await prisma.postLikes.create({
+    data: { postId, userId: likerId }
+  });
+  return post;
+}

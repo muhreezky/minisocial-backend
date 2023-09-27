@@ -11,28 +11,30 @@ datasource db {
 }
 
 model Post {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String    @db.ObjectId
-  user      User      @relation(fields: [userId], references: [id])
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String      @db.ObjectId
+  user      User        @relation(fields: [userId], references: [id])
   mediaUrl  String
   comments  Comment[]
-  caption   String    @default("")
-  createdAt DateTime  @default(now())
-  editedAt  DateTime  @default(now())
+  likes     PostLikes[]
+  caption   String      @default("")
+  createdAt DateTime    @default(now())
+  editedAt  DateTime    @default(now())
 }
 
 model User {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  username     String    @unique
-  email        String    @unique
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  username     String      @unique
+  email        String      @unique
   password     String
   posts        Post[]
   comments     Comment[]
-  imageUrl     String    @default("https://ui-avatars.com/api/?size=200")
-  postCount    Int       @default(0)
-  bioText      String    @default("")
-  registeredAt DateTime  @default(now())
-  updatedAt    DateTime  @default(now())
+  likes        PostLikes[]
+  imageUrl     String      @default("https://ui-avatars.com/api/?size=200")
+  postCount    Int         @default(0)
+  bioText      String      @default("")
+  registeredAt DateTime    @default(now())
+  updatedAt    DateTime    @default(now())
 }
 
 model Comment {
@@ -42,4 +44,12 @@ model Comment {
   userId String @db.ObjectId
   sender User   @relation(fields: [userId], references: [id])
   post   Post   @relation(fields: [postId], references: [id])
+}
+
+model PostLikes {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  postId String @db.ObjectId
+  post   Post   @relation(fields: [postId], references: [id])
+  userId String @db.ObjectId
+  user   User?  @relation(fields: [userId], references: [id])
 }
