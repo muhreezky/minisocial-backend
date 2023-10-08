@@ -1,4 +1,5 @@
 import prisma from '../utils/prisma';
+import request from 'request';
 
 export async function createPost(
   mediaUrl: string,
@@ -42,6 +43,12 @@ export async function deletePost(postId: string, userId: string) {
   const edit = await prisma.post.delete({
     where: { id: postId, userId },
   });
+  const delUrl = edit.mediaUrl.replace('/public', '');
+  request.delete(delUrl, {
+    headers: {
+      'Authorization': `Bearer ${process.env.SUPABASE_KEY}`
+    }
+  })
 
   await prisma.user.update({
     where: { id: userId },
@@ -97,4 +104,24 @@ export async function likePost(postId: string, likerId: string) {
     data: { postId, userId: likerId }
   });
   return post;
+}
+
+export async function searchAccount(text: string, cursor?: string) {
+  if (!text) 
+    return null;
+  const where = {
+    username: { contains: text }
+  };
+  let acc: any;
+  if (!cursor) {
+    acc = await prisma.user.findFirst({ where });
+  }
+  const accounts = await prisma.user.findMany({
+    take: 5,
+    skip: !cursor ? 0 : 1,
+    where,
+    cursor: { id: cursor || acc?.id }
+  });
+
+  return accounts;
 }

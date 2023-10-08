@@ -1,4 +1,3 @@
-// import { Request, Response } from 'express';
 import { createPost, deletePost, editCaption, getPosts, viewPost } from '../services/post.service';
 import { JwtPayload } from 'jsonwebtoken';
 
@@ -34,8 +33,8 @@ export async function deletePostAction(req: any, res: any) {
 		const { postId } = req.params;
 		const deletedPost = await deletePost(postId, token.id);
 		if (!deletedPost) 
-			return res.status(404).json({ message: 'Postingan tidak ada', data: null });
-		return res.status(200).json({ message: 'Postingan berhasil dihapus', data: { deletedPost } });
+			return res.status(404).json({ status: 404, message: 'Postingan tidak ada', data: null });
+		return res.status(200).json({ status: 200, message: 'Postingan berhasil dihapus', data: { deletedPost } });
 	} catch (e: any) {
 		return res.status(500).json({ message: e.message, error: e });
 	}
@@ -43,8 +42,8 @@ export async function deletePostAction(req: any, res: any) {
 
 export async function getPostsAction(req: any, res: any) {
 	try {
-		const { before } = req.query;
-		const posts = await getPosts(before as string);
+		const { before, username } = req.query;
+		const posts = await getPosts(before as string, username as string || "");
 		return res.status(200).json({ 
 			message: 'Beberapa postingan telah muncul', 
 			data: { after: posts[posts.length-1]?.id, posts } 
@@ -58,7 +57,9 @@ export async function viewPostAction(req: any, res: any) {
 	try {
 		const { postId } = req.params;
 		const post = await viewPost(postId);
-		return res.status(200).json({ message: 'Postingan berhasil dimunculkan', data: { post } });
+		if (!post) 
+			return res.status(404).json({ message: 'Postingan tidak ada', status: 404, data: null });
+		return res.status(200).json({ message: 'Postingan berhasil dimunculkan', status: 200, data: { post } });
 	} catch (e: any) {
 		return res.status(500).json({ message: e.message, error: e });
 	}

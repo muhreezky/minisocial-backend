@@ -1,4 +1,5 @@
-import { getByUsername } from '../services/user.service';
+import { JwtPayload } from 'jsonwebtoken';
+import { getByUsername, deleteAccount } from '../services/user.service';
 
 export async function getUserByUsername(req: any, res: any) {
 	const { username } = req.params;
@@ -9,4 +10,11 @@ export async function getUserByUsername(req: any, res: any) {
 		message: 'User ditemukan', 
 		data: { user } 
 	});
+}
+
+export async function deleteUserAccount(req: any, res: any) {
+	const token = req.token as JwtPayload;
+	if(!token.id) return res.status(403).json({ message: 'Anda tidak boleh menghapus akun tanpa izin', status: 403, data: null });
+	const account = await deleteAccount(token.id);
+	return res.status(200).json({ message: 'Akun anda sudah dihapus', status: 200, data: { account } });
 }

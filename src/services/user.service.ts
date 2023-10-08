@@ -24,3 +24,20 @@ export async function getUserById(id: string) {
   });
   return user;
 }
+
+export async function searchAccount(searchText: string) {
+  const users = await prisma.user.findMany({
+    where: {
+      username: { contains: searchText }
+    },
+  });
+
+  return users;
+}
+
+export async function deleteAccount(userId: string) {
+  const user = await prisma.user.delete({
+    where: { id: userId }
+  });
+  return user;
+}
