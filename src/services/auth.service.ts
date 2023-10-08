@@ -3,11 +3,13 @@ import prisma from '../utils/prisma';
 import { getUserData } from './user.service';
 
 export async function newAccount(
-  email: string,
-  username: string,
+  emailText: string,
+  usernameText: string,
   password: string
 ) {
   try {
+    const email = emailText.toLowerCase();
+    const username = usernameText.toLowerCase();
     const exists = !!(await getUserData(email, username));
     if (exists) return null;
     const salt = await bcrypt.genSalt(6);
@@ -27,5 +29,27 @@ export async function login(email: string, password: string) {
   if (!user) return null;
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) return null;
+  return user;
+}
+
+export async function changeUsername(userId: string, usernameText: string) {
+  try {
+    if (!usernameText) return null;
+    const username = usernameText.toLowerCase();
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { username }
+    });
+    return user;
+  } catch (e: any) {
+    return e;
+  }
+}
+
+export async function changeBioText(userId: string, bioText: string) {
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: { bioText }
+  });
   return user;
 }

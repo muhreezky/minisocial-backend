@@ -1,5 +1,4 @@
-
-import { login, newAccount } from '../services/auth.service';
+import { login, newAccount, changeUsername as changeUname, changeBioText } from '../services/auth.service';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import 'dotenv/config';
 // import { Customany } from '../types/cusany';
@@ -58,5 +57,29 @@ export async function getMe(req: any, res: any) {
     return res.status(200).json({ message: 'User ditemukan', data: { user } });
   } catch (e: any) {
     return res.status(500).json({ message: e.message, error: e });
+  }
+}
+
+export async function changeUsername(req: any, res: any) {
+  try {
+    const token = req.token as JwtPayload;
+    const { username } = req.body;
+    const user = await changeUname(token.id, username);
+    if (!user) return res.status(404).json({ status: 404, message: 'User tidak ada', data: null });
+    return res.status(200).json({ status: 200, message: 'Username berhasil diubah', data: { user } });
+  } catch (e: any) {
+    return res.status(500).json({ status: 500, message: e.message, error: e });
+  }
+}
+
+export async function changeBio(req: any, res: any) {
+  try {
+    const token = req.token as JwtPayload;
+    const { biotext } = req.body;
+    const user = await changeBioText(token.id, biotext);
+    if (!user) return res.status(404).json({ status: 404, message: 'User tidak ada', data: null });
+    return res.status(200).json({ status: 200, message: 'Bio Text telah diubah', data: { user } });
+  } catch (e: any) {
+    return res.status(500).json({ status: 500, message: e.message, error: e });
   }
 }
