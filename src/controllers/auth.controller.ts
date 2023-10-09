@@ -71,7 +71,7 @@ export async function changeUsername(req: any, res: any) {
     if (alphaNumOnly.test(username)) 
       return res.status(400).json({ status: 400, message: 'Username tidak boleh pakai simbol selain . dan _', data: null });
     const user = await changeUname(token.id, username);
-    if (!user) return res.status(404).json({ status: 404, message: 'User tidak ada', data: null });
+    if (!user) return res.status(400).json({ status: 400, message: 'Username sudah ada', data: null });
     return res.status(200).json({ status: 200, message: 'Username berhasil diubah', data: { user } });
   } catch (e: any) {
     return res.status(500).json({ status: 500, message: e.message, error: e });

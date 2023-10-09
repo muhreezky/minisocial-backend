@@ -36,6 +36,8 @@ export async function changeUsername(userId: string, usernameText: string) {
   try {
     if (!usernameText) return null;
     const username = usernameText.toLowerCase();
+    const exists = !!(await getUserData(username));
+    if (exists) return null;
     const user = await prisma.user.update({
       where: { id: userId },
       data: { username }
