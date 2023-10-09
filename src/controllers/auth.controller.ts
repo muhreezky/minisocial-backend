@@ -2,7 +2,7 @@ import { login, newAccount, changeUsername as changeUname, changeBioText } from 
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import 'dotenv/config';
 // import { Customany } from '../types/cusany';
-import { getUserById } from '../services/user.service';
+import { deleteAccount, getUserById } from '../services/user.service';
 
 export async function registerUser(req: any, res: any) {
   try {
@@ -79,6 +79,18 @@ export async function changeBio(req: any, res: any) {
     const user = await changeBioText(token.id, biotext);
     if (!user) return res.status(404).json({ status: 404, message: 'User tidak ada', data: null });
     return res.status(200).json({ status: 200, message: 'Bio Text telah diubah', data: { user } });
+  } catch (e: any) {
+    return res.status(500).json({ status: 500, message: e.message, error: e });
+  }
+}
+
+export async function deleteUser(req: any, res: any) {
+  try {
+    const token = req.token as JwtPayload;
+    if (!token.id) return res.status(401).json({ status: 401, message: 'Anda harus login dulu', data: null });
+    const user = await deleteAccount(token.id);
+    if (!user) return res.status(404).json({ status: 404, message: 'User tidak ditemukan', data: null });
+    return res.status(200).json({ status: 200, message: 'Akun berhasil dihapus', data: { user } });
   } catch (e: any) {
     return res.status(500).json({ status: 500, message: e.message, error: e });
   }

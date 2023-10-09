@@ -9,7 +9,6 @@ export async function getByUsername(username: string) {
 }
 
 export async function getUserData(cred: string, uname?: string) {
-  console.log({ cred, uname });
   const user = await prisma.user.findFirst({
     where: {
       OR: [{ email: cred }, { username: uname || cred }],

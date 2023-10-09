@@ -42,7 +42,7 @@ export async function changeUsername(userId: string, usernameText: string) {
     });
     return user;
   } catch (e: any) {
-    return e;
+    throw e;
   }
 }
 
